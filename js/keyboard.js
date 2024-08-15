@@ -62,11 +62,8 @@ game.keydown = function (event) {
 		case 32:
 			if(!game.player.isInAir) {
 				game.player.jump()
-				game.player.isInAir = true
 			} else if(!game.player.isDoubleJump) {
 				game.player.doubleJump()
-				clearTimeout(game.player.fallTimeout)
-				game.player.isDoubleJump = true
 			}
 			break
 	}

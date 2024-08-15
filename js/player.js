@@ -28,13 +28,10 @@ game.player = {
 						if(!this.startedDoubleJump) {
 							this.fallTimeout(startingY, time, maxHeight)
 						}
-						console.log(time)
 					} else {
 						game.isOver = true
-						console.log("over 150")
 					}
 					if (this.y > 40) {
-						console.log("over 40")
 						game.isOver = true
 					}
 					game.requestRedraw()
