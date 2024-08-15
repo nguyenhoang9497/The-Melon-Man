@@ -5,10 +5,12 @@ game.player = {
 		highestY: 0,
 		direction: "left",
 		isInAir: false,
+		isDoubleJump: false,
 		startedJump: false,
+		startedDoubleJump: false,
 		moveInterval: null,
 		fallTimeout: function(startingY, time, maxHeight) {
-			setTimeout( function () {
+			var a = setTimeout( function () {
 				if (this.isInAir) {
 					this.y = startingY - maxHeight + Math.pow((-time / 3 + 11), 2)
 					if (this.y < this.highestY) {
@@ -19,12 +21,20 @@ game.player = {
 						game.checkCollisions()
 					}
 					if (time < 150) {
+						if(time==1 && this.startedDoubleJump) {
+							this.startedDoubleJump = false
+						}
 						time++
-						this.fallTimeout(startingY, time, maxHeight)
+						if(!this.startedDoubleJump) {
+							this.fallTimeout(startingY, time, maxHeight)
+						}
+						console.log(time)
 					} else {
 						game.isOver = true
+						console.log("over 150")
 					}
 					if (this.y > 40) {
+						console.log("over 40")
 						game.isOver = true
 					}
 					game.requestRedraw()
@@ -53,5 +63,19 @@ game.player = {
 				}
 				this.fallTimeout(startingY, time, maxHeight)
 			}
+		},
+		doubleJump: function (type) {
+			clearInterval(this.fallInterval)
+			game.sounds.jump.play()
+			this.isDoubleJump = true
+			this.startedDoubleJump = true
+			var startingY = this.y
+			var time = 1
+			maxHeight = 121
+			if (type == "fall") {
+				time = 30
+				maxHeight = 0
+			}
+			this.fallTimeout(startingY, time, maxHeight)
 		}
 	}
